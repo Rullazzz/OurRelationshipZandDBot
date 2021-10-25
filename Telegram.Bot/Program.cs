@@ -1,5 +1,8 @@
-﻿using System;
+﻿using MyTelegram.Bot.Constans;
+using MyTelegram.Bot.Handlers;
+using System;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -42,7 +45,7 @@ namespace MyTelegram.Bot
 
 		public static string GetToken(string pathToTokentxt)
 		{
-			using (StreamReader r = new StreamReader(pathToTokentxt)) 
+			using (var r = new StreamReader(pathToTokentxt)) 
 			{
 				var token = r.ReadLine();
 				return token;
@@ -69,17 +72,29 @@ namespace MyTelegram.Bot
 				return;
 
 			var chatId = update.Message.Chat.Id;
+			SendDataInConsole(botClient, update, chatId);
 
+			if (Settings.AllowedUsersId.ContainsValue(chatId))
+			{
+				var textMessage = update.Message.Text;
+
+				if (textMessage.StartsWith(Commands.Schedule))
+				{
+					CommandHandler.OnScheduleCommand(botClient, update.Message.Chat);
+				}
+			}
+			else
+			{
+				await botClient.SendTextMessageAsync(update.Message.Chat, "Unknown user. Access denied!");
+			}
+		}
+
+		private static void SendDataInConsole(ITelegramBotClient botClient, Update update, long chatId)
+		{
 			Console.WriteLine();
 			Console.WriteLine($"Received a '{update.Message.Text}' message in chat {chatId}.");
 			Console.WriteLine($"BotId: {botClient.BotId}");
-
 			Console.WriteLine($"Is bot: {update.Message.From.IsBot}, id: {update.Message.From.Id} Name: {update.Message.From.FirstName}");
-
-			await botClient.SendTextMessageAsync(
-				chatId: chatId,
-				text: "You said:\n" + update.Message.Text
-			);
 		}
 	}
 }

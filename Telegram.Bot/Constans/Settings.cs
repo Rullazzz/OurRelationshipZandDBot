@@ -1,7 +1,13 @@
-﻿namespace MyTelegram.Bot.Constans
+﻿using System.Collections.Generic;
+
+namespace MyTelegram.Bot.Constans
 {
-	class Settings
+	public static class Settings
 	{
-		public readonly long[] AllowedUsersId = { 846062920, 1215993728 };
+		public static readonly Dictionary<string, long> AllowedUsersId = new Dictionary<string, long>()
+		{
+			{"firstPartner",  846062920},
+			{"secondPartner", 1215993728}
+		};
 	}
 }
