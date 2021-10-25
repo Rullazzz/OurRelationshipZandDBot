@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -18,7 +19,7 @@ namespace MyTelegram.Bot
 
 		static void InitializingBot()
 		{
-			var botClient = new TelegramBotClient("2092804178:AAGMsJQPnu9mabwhEqb1oV5CIWZdCfJUEcU");
+			var botClient = new TelegramBotClient(GetToken(@"E:\С# файлы\OurRelationshipZandDBot\Telegram.Bot\Constans\token.txt"));
 
 			var me = botClient.GetMeAsync().Result;
 			Console.WriteLine(
@@ -37,6 +38,15 @@ namespace MyTelegram.Bot
 
 			// Send cancellation request to stop bot
 			cts.Cancel();
+		}
+
+		public static string GetToken(string pathToTokentxt)
+		{
+			using (StreamReader r = new StreamReader(pathToTokentxt)) 
+			{
+				var token = r.ReadLine();
+				return token;
+			}
 		}
 
 		static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
@@ -65,6 +75,7 @@ namespace MyTelegram.Bot
 			Console.WriteLine($"BotId: {botClient.BotId}");
 
 			Console.WriteLine($"Is bot: {update.Message.From.IsBot}, id: {update.Message.From.Id} Name: {update.Message.From.FirstName}");
+
 			await botClient.SendTextMessageAsync(
 				chatId: chatId,
 				text: "You said:\n" + update.Message.Text
