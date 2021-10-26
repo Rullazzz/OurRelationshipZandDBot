@@ -21,7 +21,8 @@ namespace MyTelegram.Bot
 
 		static void InitializingBot()
 		{
-			var botClient = new TelegramBotClient(GetToken(@"E:\С# файлы\OurRelationshipZandDBot\Telegram.Bot\Constans\token.txt"));
+
+			var botClient = new TelegramBotClient(GetToken());
 
 			var me = botClient.GetMeAsync().Result;
 			Console.WriteLine(
@@ -42,9 +43,11 @@ namespace MyTelegram.Bot
 			cts.Cancel();
 		}
 
-		public static string GetToken(string pathToTokentxt)
+		private static string GetToken()
 		{
-			using var r = new StreamReader(pathToTokentxt);
+			var pathToToken = Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\token.txt");
+
+			using var r = new StreamReader(pathToToken);
 			var token = r.ReadLine();
 			return token;
 		}
@@ -78,7 +81,9 @@ namespace MyTelegram.Bot
 				if (textMessage.StartsWith(Commands.Schedule))
 					await CommandHandler.OnScheduleCommand(botClient, update.Message.Chat);
 				else if (textMessage.StartsWith(Commands.DaysDating))
-					await CommandHandler.OnDaysDatingCommand(botClient, update.Message.Chat);				
+					await CommandHandler.OnDaysDatingCommand(botClient, update.Message.Chat);
+				else if (textMessage.StartsWith(Commands.Motivation))
+					await CommandHandler.OnMotivationCommand(botClient, update.Message.Chat);
 			}
 			else
 			{
