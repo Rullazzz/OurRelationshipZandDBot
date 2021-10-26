@@ -1,8 +1,5 @@
-﻿using MyTelegram.Bot.Constans;
-using MyTelegram.Bot.Handlers;
-using System;
+﻿using System;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -10,6 +7,8 @@ using Telegram.Bot.Exceptions;
 using Telegram.Bot.Extensions.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using MyTelegram.Bot.Constans;
+using MyTelegram.Bot.Handlers;
 
 namespace MyTelegram.Bot
 {
@@ -45,11 +44,9 @@ namespace MyTelegram.Bot
 
 		public static string GetToken(string pathToTokentxt)
 		{
-			using (var r = new StreamReader(pathToTokentxt)) 
-			{
-				var token = r.ReadLine();
-				return token;
-			}
+			using var r = new StreamReader(pathToTokentxt);
+			var token = r.ReadLine();
+			return token;
 		}
 
 		static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
@@ -79,9 +76,9 @@ namespace MyTelegram.Bot
 				var textMessage = update.Message.Text;
 
 				if (textMessage.StartsWith(Commands.Schedule))
-				{
-					CommandHandler.OnScheduleCommand(botClient, update.Message.Chat);
-				}
+					await CommandHandler.OnScheduleCommand(botClient, update.Message.Chat);
+				else if (textMessage.StartsWith(Commands.DaysDating))
+					await CommandHandler.OnDaysDatingCommand(botClient, update.Message.Chat);				
 			}
 			else
 			{
