@@ -5,11 +5,14 @@ using System.IO;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using Telegram.Bot.Types.Enums;
 
 namespace MyTelegram.Bot.Handlers
 {
 	public class CommandHandler
 	{
+		private static Random rnd = new Random(DateTime.Now.Second);
+
 		private static readonly DateTime startDating = new DateTime(2020, 3, 9);
 
 		public static async Task OnScheduleCommand(ITelegramBotClient botClient, ChatId chatId)
@@ -20,14 +23,14 @@ namespace MyTelegram.Bot.Handlers
 			if (chatId is null)
 				throw new ArgumentNullException(nameof(chatId));			
 
-			var path = Settings.AllowedUsersId["firstPartner"] == chatId ?
+			var path = Settings.AllowedUsersId["firstPartner"] == chatId.Identifier ?
 				Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\dashaSchedule.txt"):
 				Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\zaharSchedule.txt");		
 
 			using var r = new StreamReader(path);
 			string schedule = r.ReadToEnd();
 
-			await botClient.SendTextMessageAsync(chatId, schedule);
+			await botClient.SendTextMessageAsync(chatId, schedule, ParseMode.Markdown);
 			await botClient.SendStickerAsync(chatId, Stickers.LoveStickers["cuteFrog"]);
 		}
 
@@ -54,11 +57,11 @@ namespace MyTelegram.Bot.Handlers
 				throw new ArgumentNullException(nameof(botClient));			
 
 			if (chatId is null)
-				throw new ArgumentNullException(nameof(chatId));			
+				throw new ArgumentNullException(nameof(chatId));
 
 			var path = Settings.AllowedUsersId["firstPartner"] == chatId ?
-				  Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\motivationForDasha.txt"): 
-				  @"E:\С# файлы\OurRelationshipZandDBot\Telegram.Bot\Constans\motivationForDasha.txt";
+				  Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\motivationForDasha.txt"):
+				  Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\motivationForDasha.txt");
 			//TODO: Добавить мотивацию для себя.
 
 			var motivationLines = new List<string>();
@@ -69,10 +72,23 @@ namespace MyTelegram.Bot.Handlers
 					motivationLines.Add(line);
 			}
 
-			var rnd = new Random(DateTime.Now.Millisecond);
-
 			await botClient.SendTextMessageAsync(chatId, motivationLines[rnd.Next(motivationLines.Count)]);
 			await botClient.SendStickerAsync(chatId, Stickers.LoveStickers["cuteHedgehog"]);
+		}
+
+		public static async Task OnInfoCommand(ITelegramBotClient botClient, ChatId chatId)
+		{
+			if (botClient is null)
+				throw new ArgumentNullException(nameof(botClient));
+
+			if (chatId is null)
+				throw new ArgumentNullException(nameof(chatId));
+
+			var path = Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\info.txt");
+			using var r = new StreamReader(path);
+			string info = r.ReadToEnd();
+
+			await botClient.SendTextMessageAsync(chatId, info);
 		}
 	}
 }

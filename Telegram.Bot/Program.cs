@@ -84,6 +84,8 @@ namespace MyTelegram.Bot
 					await CommandHandler.OnDaysDatingCommand(botClient, update.Message.Chat);
 				else if (textMessage.StartsWith(Commands.Motivation))
 					await CommandHandler.OnMotivationCommand(botClient, update.Message.Chat);
+				else if (textMessage.StartsWith(Commands.Info))
+					await CommandHandler.OnInfoCommand(botClient, update.Message.Chat);
 			}
 			else
 			{
