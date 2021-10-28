@@ -15,14 +15,10 @@ namespace MyTelegram.Bot.Handlers
 		public static async Task OnScheduleCommand(ITelegramBotClient botClient, ChatId chatId)
 		{
 			if (botClient is null)
-			{
 				throw new ArgumentNullException(nameof(botClient));
-			}
 
 			if (chatId is null)
-			{
-				throw new ArgumentNullException(nameof(chatId));
-			}			
+				throw new ArgumentNullException(nameof(chatId));			
 
 			var path = Settings.AllowedUsersId["firstPartner"] == chatId ?
 				Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\dashaSchedule.txt"):
@@ -32,20 +28,16 @@ namespace MyTelegram.Bot.Handlers
 			string schedule = r.ReadToEnd();
 
 			await botClient.SendTextMessageAsync(chatId, schedule);
-			await botClient.SendStickerAsync(chatId, "CAACAgIAAxkBAAEDKHNhd725RnrpL6ENhv0NF5fraQ9XugACBQEAAjDUnRHjuap2nB4GSyEE");
+			await botClient.SendStickerAsync(chatId, Stickers.LoveStickers["cuteFrog"]);
 		}
 
 		public static async Task OnDaysDatingCommand(ITelegramBotClient botClient, ChatId chatId)
 		{
 			if (botClient is null)
-			{
-				throw new ArgumentNullException(nameof(botClient));
-			}
+				throw new ArgumentNullException(nameof(botClient));			
 
 			if (chatId is null)
-			{
-				throw new ArgumentNullException(nameof(chatId));
-			}
+				throw new ArgumentNullException(nameof(chatId));			
 
 			var dating = DateTime.Now - startDating;
 			string result = $"Мы встречаемся уже {dating.Days} дней!\n"
@@ -53,23 +45,20 @@ namespace MyTelegram.Bot.Handlers
 						  + $"Пусть другие завидуют😘😏";
 
 			await botClient.SendTextMessageAsync(chatId, result);
-			await botClient.SendStickerAsync(chatId, "CAACAgIAAxkBAAEDJ8hhd7wGuiZqMtGgZq6ahbeVHr77UAACjwAD9wLID_wtjEXQLXvPIQQ");
+			await botClient.SendStickerAsync(chatId, Stickers.LoveStickers["twoFoxes"]);
 		}
 
 		public static async Task OnMotivationCommand(ITelegramBotClient botClient, ChatId chatId)
 		{
 			if (botClient is null)
-			{
-				throw new ArgumentNullException(nameof(botClient));
-			}
+				throw new ArgumentNullException(nameof(botClient));			
 
 			if (chatId is null)
-			{
-				throw new ArgumentNullException(nameof(chatId));
-			}
+				throw new ArgumentNullException(nameof(chatId));			
+
 			var path = Settings.AllowedUsersId["firstPartner"] == chatId ?
-				  Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\motivationForDasha.txt")
-				: @"E:\С# файлы\OurRelationshipZandDBot\Telegram.Bot\Constans\motivationForDasha.txt";
+				  Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\motivationForDasha.txt"): 
+				  @"E:\С# файлы\OurRelationshipZandDBot\Telegram.Bot\Constans\motivationForDasha.txt";
 			//TODO: Добавить мотивацию для себя.
 
 			var motivationLines = new List<string>();
@@ -83,7 +72,7 @@ namespace MyTelegram.Bot.Handlers
 			var rnd = new Random(DateTime.Now.Millisecond);
 
 			await botClient.SendTextMessageAsync(chatId, motivationLines[rnd.Next(motivationLines.Count)]);
-			await botClient.SendStickerAsync(chatId, "CAACAgIAAxkBAAEDKONheAABNEpb2nIdmPmK2yAhpbEB_zwAAscPAALuzllJ77fOwaT5eg8hBA");
+			await botClient.SendStickerAsync(chatId, Stickers.LoveStickers["cuteHedgehog"]);
 		}
 	}
 }
