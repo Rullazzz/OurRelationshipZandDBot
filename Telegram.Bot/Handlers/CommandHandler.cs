@@ -11,7 +11,8 @@ namespace MyTelegram.Bot.Handlers
 {
 	public class CommandHandler
 	{
-		private static Random rnd = new Random(DateTime.Now.Second);
+		private static Random rnd = new Random();
+		private static int lastRandomIndex = 0;
 
 		private static readonly DateTime startDating = new DateTime(2020, 3, 9);
 
@@ -72,8 +73,22 @@ namespace MyTelegram.Bot.Handlers
 					motivationLines.Add(line);
 			}
 
-			await botClient.SendTextMessageAsync(chatId, motivationLines[rnd.Next(motivationLines.Count)]);
+			var randomIndex = GetRandomNumber(motivationLines.Count);
+
+			await botClient.SendTextMessageAsync(chatId, motivationLines[randomIndex]);
 			await botClient.SendStickerAsync(chatId, Stickers.LoveStickers["cuteHedgehog"]);
+		}
+
+		private static int GetRandomNumber(int count)
+		{
+			var randomIndex = rnd.Next(count);
+			if (randomIndex == lastRandomIndex && count >= 2)
+			{
+				while (randomIndex == lastRandomIndex)
+					randomIndex = rnd.Next(count);
+			}
+			lastRandomIndex = randomIndex;
+			return randomIndex;
 		}
 
 		public static async Task OnInfoCommand(ITelegramBotClient botClient, ChatId chatId)
