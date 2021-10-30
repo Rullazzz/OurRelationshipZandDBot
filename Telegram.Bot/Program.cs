@@ -45,11 +45,7 @@ namespace MyTelegram.Bot
 
 		private static string GetToken()
 		{
-			var pathToToken = Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\token.txt");
-
-			using var r = new StreamReader(pathToToken);
-			var token = r.ReadLine();
-			return token;
+			return Settings.GetToken();
 		}
 
 		static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)

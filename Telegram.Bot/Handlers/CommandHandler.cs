@@ -22,14 +22,10 @@ namespace MyTelegram.Bot.Handlers
 				throw new ArgumentNullException(nameof(botClient));
 
 			if (chatId is null)
-				throw new ArgumentNullException(nameof(chatId));			
+				throw new ArgumentNullException(nameof(chatId));
 
-			var path = Settings.AllowedUsersId["firstPartner"] == chatId.Identifier ?
-				Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\dashaSchedule.txt"):
-				Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\zaharSchedule.txt");		
-
-			using var r = new StreamReader(path);
-			string schedule = r.ReadToEnd();
+			//TODO: Потом переделать для себя!
+			var schedule = Settings.AllowedUsersId["firstPartner"] == chatId.Identifier ? Answers.GetDashaSchedule() : Answers.GetDashaSchedule();
 
 			await botClient.SendTextMessageAsync(chatId, schedule, ParseMode.Markdown);
 			await botClient.SendStickerAsync(chatId, Stickers.LoveStickers["cuteFrog"]);
@@ -60,22 +56,12 @@ namespace MyTelegram.Bot.Handlers
 			if (chatId is null)
 				throw new ArgumentNullException(nameof(chatId));
 
-			var path = Settings.AllowedUsersId["firstPartner"] == chatId ?
-				  Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\motivationForDasha.txt"):
-				  Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\motivationForDasha.txt");
+			var motivations = Settings.AllowedUsersId["firstPartner"] == chatId ? Answers.GetMotivationForDasha() : Answers.GetMotivationForDasha();
 			//TODO: Добавить мотивацию для себя.
 
-			var motivationLines = new List<string>();
-			string line;
-			using (var r = new StreamReader(path))
-			{
-				while ((line = r.ReadLine()) != null)
-					motivationLines.Add(line);
-			}
+			var randomIndex = GetRandomNumber(motivations.Length);
 
-			var randomIndex = GetRandomNumber(motivationLines.Count);
-
-			await botClient.SendTextMessageAsync(chatId, motivationLines[randomIndex]);
+			await botClient.SendTextMessageAsync(chatId, motivations[randomIndex]);
 			await botClient.SendStickerAsync(chatId, Stickers.GetRandomSticker(Stickers.LoveStickers));
 		}
 
@@ -99,10 +85,7 @@ namespace MyTelegram.Bot.Handlers
 			if (chatId is null)
 				throw new ArgumentNullException(nameof(chatId));
 
-			var path = Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\Constans\info.txt");
-			using var r = new StreamReader(path);
-			string info = r.ReadToEnd();
-
+			var info = Answers.GetInfo();
 			await botClient.SendTextMessageAsync(chatId, info);
 		}
 	}
