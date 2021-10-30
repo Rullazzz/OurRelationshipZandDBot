@@ -95,8 +95,7 @@ namespace MyTelegram.Bot
 
 		private static void SendDataInConsole(ITelegramBotClient botClient, Update update, long chatId)
 		{
-			Console.WriteLine();
-			Console.WriteLine($"Received a '{update.Message.Text}' message in chat {chatId}.");
+			Console.WriteLine($"\nReceived a '{update.Message.Text}' message in chat {chatId}.");
 			Console.WriteLine($"BotId: {botClient.BotId}");
 			Console.WriteLine($"Is bot: {update.Message.From.IsBot}, id: {update.Message.From.Id} Name: {update.Message.From.FirstName}");
 		}

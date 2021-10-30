@@ -49,7 +49,7 @@ namespace MyTelegram.Bot.Handlers
 						  + $"Пусть другие завидуют😘😏";
 
 			await botClient.SendTextMessageAsync(chatId, result);
-			await botClient.SendStickerAsync(chatId, Stickers.LoveStickers["twoFoxes"]);
+			await botClient.SendStickerAsync(chatId, Stickers.LoveStickers["twoFrogs"]);
 		}
 
 		public static async Task OnMotivationCommand(ITelegramBotClient botClient, ChatId chatId)
@@ -76,7 +76,7 @@ namespace MyTelegram.Bot.Handlers
 			var randomIndex = GetRandomNumber(motivationLines.Count);
 
 			await botClient.SendTextMessageAsync(chatId, motivationLines[randomIndex]);
-			await botClient.SendStickerAsync(chatId, Stickers.LoveStickers["cuteHedgehog"]);
+			await botClient.SendStickerAsync(chatId, Stickers.GetRandomSticker(Stickers.LoveStickers));
 		}
 
 		private static int GetRandomNumber(int count)
