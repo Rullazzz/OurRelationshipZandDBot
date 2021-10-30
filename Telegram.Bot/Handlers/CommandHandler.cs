@@ -11,9 +11,8 @@ namespace MyTelegram.Bot.Handlers
 {
 	public class CommandHandler
 	{
-		private static Random rnd = new Random();
-		private static int lastRandomIndex = 0;
-
+		private static int currentIndexMotivation = 0;
+		private static int currentIndexSticker = 0;		
 		private static readonly DateTime startDating = new DateTime(2020, 3, 9);
 
 		public static async Task OnScheduleCommand(ITelegramBotClient botClient, ChatId chatId)
@@ -59,22 +58,16 @@ namespace MyTelegram.Bot.Handlers
 			var motivations = Settings.AllowedUsersId["firstPartner"] == chatId ? Answers.GetMotivationForDasha() : Answers.GetMotivationForDasha();
 			//TODO: Добавить мотивацию для себя.
 
-			var randomIndex = GetRandomNumber(motivations.Length);
-
-			await botClient.SendTextMessageAsync(chatId, motivations[randomIndex]);
-			await botClient.SendStickerAsync(chatId, Stickers.GetRandomSticker(Stickers.LoveStickers));
+			await botClient.SendTextMessageAsync(chatId, motivations[GetNextIndex(ref currentIndexMotivation, motivations.Length)]);
+			await botClient.SendStickerAsync(chatId, Stickers.GetSticker(Stickers.LoveStickers, GetNextIndex(ref currentIndexSticker, motivations.Length)));
 		}
 
-		private static int GetRandomNumber(int count)
+		private static int GetNextIndex(ref int value, int count)
 		{
-			var randomIndex = rnd.Next(count);
-			if (randomIndex == lastRandomIndex && count >= 2)
-			{
-				while (randomIndex == lastRandomIndex)
-					randomIndex = rnd.Next(count);
-			}
-			lastRandomIndex = randomIndex;
-			return randomIndex;
+			if ((value + 1) < count)
+				return ++value;
+			else
+				return value = 0;
 		}
 
 		public static async Task OnInfoCommand(ITelegramBotClient botClient, ChatId chatId)

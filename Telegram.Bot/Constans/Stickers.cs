@@ -27,5 +27,11 @@ namespace MyTelegram.Bot.Constans
 			int size = dict.Count;			
 			return values[rand.Next(size)];			
 		}
+
+		public static string GetSticker<TKey>(IDictionary<TKey, string> dict, int key)
+		{
+			List<string> values = Enumerable.ToList(dict.Values);
+			return values[key]; 
+		}
 	}
 }
