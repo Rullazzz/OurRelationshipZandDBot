@@ -59,7 +59,7 @@ namespace MyTelegram.Bot.Handlers
 			//TODO: Добавить мотивацию для себя.
 
 			await botClient.SendTextMessageAsync(chatId, motivations[GetNextIndex(ref currentIndexMotivation, motivations.Length)]);
-			await botClient.SendStickerAsync(chatId, Stickers.GetSticker(Stickers.LoveStickers, GetNextIndex(ref currentIndexSticker, motivations.Length)));
+			await botClient.SendStickerAsync(chatId, Stickers.GetSticker(Stickers.AllStikers, GetNextIndex(ref currentIndexSticker, motivations.Length)));
 		}
 
 		private static int GetNextIndex(ref int value, int count)

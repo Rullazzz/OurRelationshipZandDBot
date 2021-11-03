@@ -51,10 +51,10 @@ namespace MyTelegram.Bot.Constans
 			return values[rand.Next(size)];			
 		}
 
-		public static string GetSticker<TKey>(IEnumerable<string> stikers, int key)
+		public static string GetSticker(IEnumerable<string> stikers, int key)
 		{
 			List<string> values = Enumerable.ToList(stikers);
-			return values[key]; 
+			return values[key];
 		}
 	}
 }
