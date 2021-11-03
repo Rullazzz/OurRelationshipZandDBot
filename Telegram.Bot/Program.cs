@@ -45,7 +45,7 @@ namespace MyTelegram.Bot
 
 		private static string GetToken()
 		{
-			return Settings.GetToken();
+			return Settings.Token;
 		}
 
 		static Task HandleErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
